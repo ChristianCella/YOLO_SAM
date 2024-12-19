@@ -21,13 +21,13 @@ datagen = ImageDataGenerator(
 )
 
 # Define the input folder containing the images (and check if it exists)
-input_folder = Path("Images")/object/"Becker"
+input_folder = Path("Images")/object/"Initial_images"
 if not input_folder.exists():
     print(f"Error: The input folder {input_folder} does not exist")
     sys.exit(1)
 
 # Define the output folder for augmented images
-output_folder = Path("Images/Beckers/Temp_augmentation_beckers")
+output_folder = Path("Images/Beckers/Temp_augmentation")
 output_folder.mkdir(parents=True, exist_ok=True)  # Ensure the output folder exists, otherwise it is created
 
 # Iterate over all image files in the input folder

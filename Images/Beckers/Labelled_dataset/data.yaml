@@ -1,0 +1,6 @@
+names:
+- becker
+nc: 1
+test: C:\Users\chris\OneDrive - Politecnico di Milano\Politecnico di Milano\PhD - dottorato\GitHub repositories Lenovo\YOLO_SAM\Images\Beckers\Labelled_dataset\test\images
+train: C:\Users\chris\OneDrive - Politecnico di Milano\Politecnico di Milano\PhD - dottorato\GitHub repositories Lenovo\YOLO_SAM\Images\Beckers\Labelled_dataset\train\images
+val: C:\Users\chris\OneDrive - Politecnico di Milano\Politecnico di Milano\PhD - dottorato\GitHub repositories Lenovo\YOLO_SAM\Images\Beckers\Labelled_dataset\val\images

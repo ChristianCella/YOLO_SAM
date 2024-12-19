@@ -8,24 +8,29 @@ import cv2
 import os
 import numpy as np
 from collections import Counter
+import sys
+
+# Specify if you need to work with bottles or with beckers
+object = "Beckers"
 
 # Define a variable for the prints
 verbose = True
 
-# Directories
-input_images_dir = Path("Images/Beckers/Temp_augmentation_beckers")  # Folder containing all the images
-output_dir = Path("Images/Beckers/Beckers_pasted_background")  # Folder to save final images
+# Input directories
+input_images_dir = Path("Images")/object/"Temp_augmentation"  # Folder containing all the images
 backgrounds_dir = Path("Images/Background_images")  # Folder with the images of the backgrounds
-temp_dir = Path("Images/Beckers/Isolated_bottles")  # Temporary folder for background-removed images
+if not input_images_dir.exists() or not backgrounds_dir.exists():
+    print(f"Error: One of the input directories does not exist")
+    sys.exit(1)
 
-# Checks on the paths
-if verbose:
+# Output directories
+output_dir = Path("Images")/object/"Pasted_background"
+temp_dir = Path("Images")/object/"Isolated"
 
-    # Ensure output directories exist
-    output_dir.mkdir(parents = True, exist_ok = True)
-    temp_dir.mkdir(parents = True, exist_ok = True)
-    print("Output directory:", output_dir)
-    print("Temporary directory:", temp_dir)
+output_dir.mkdir(parents = True, exist_ok = True)
+temp_dir.mkdir(parents = True, exist_ok = True)
+print("Output directory:", output_dir)
+print("Temporary directory:", temp_dir)
 
 # Load all the background images
 background_files = glob(str(backgrounds_dir / "*.jpg"))

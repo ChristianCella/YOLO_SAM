@@ -2,10 +2,12 @@
 This repo is meant for Windows. All the instructions are given for this operating system.
 ## Setup
 ### Requirements
+- ultralytics
 - keras
 - tensorflow
 - CUDA
 - torch
+- rembg
 ### Virtual environment
 Open a new terminal and type:
 ```
@@ -42,11 +44,21 @@ CUDA available: True
 CUDA version: 12.4
 ```
 
+### Background removal
+This repository relies on the package ```rembg``` to remove the abckground from the initial images and obtain new ones containing only the becker or the battle pasted on a new background. To be able to use the package, run the following commands in sequence:
+```
+pip install onnxruntime-gpu
+pip install rembg
+```
+
 ### Initial structure
 
 ### Training pipeline
-For the fine-tuning of the YOLO model, you have to look at the scripts contained in the folder ```Training_pipeline ```, in the following order:
-- Augmentation.py: one at a time all the images in ```Images\Beckers\Becker``` or ```Images\Bottles\Bottle``` ar rotated, translated and filled.
+For the fine-tuning of the YOLO model, you have to look at the scripts contained in the folder ```Training_pipeline```, in the following order:
+- Augmentation.py: one at a time all the images in ```Images\...\Becker``` or ```Images\...\Bottle``` ar rotated, translated and filled. Important: after creating the dataset, look at it and remove all the images that are not meaningful.
+- Create_new_dataset.py: the output of this script is saved in ```Images\...\Pasted_bacgrounds``` and it is the result of scanning all the augmented dataset, removing the background and pasting the object (either a becker or a bottle) on a new background.
+- Create_training_dataset.py: This script is used to join the folders ```Initial_images```, ```Pasted_background```, ```Temp_auagmentation``` to create the folder ```Before_labelling``` that will be used for the labelling.
+- Autoamtic_labelling.py: this script creates the folder ```Labelled_dataset``` with the file data.yaml automatically created.
 
 ### Troubleshooting
 If you experience any problem when installing packages, maybe it is beacuse you do not have the 'LongPathEnabled' option in your registry. To fix it, open your system registers (regedit) and navigate to
