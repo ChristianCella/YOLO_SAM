@@ -59,6 +59,7 @@ For the fine-tuning of the YOLO model, you have to look at the scripts contained
 - Create_new_dataset.py: the output of this script is saved in ```Images\...\Pasted_bacgrounds``` and it is the result of scanning all the augmented dataset, removing the background and pasting the object (either a becker or a bottle) on a new background.
 - Create_training_dataset.py: This script is used to join the folders ```Initial_images```, ```Pasted_background```, ```Temp_auagmentation``` to create the folder ```Before_labelling``` that will be used for the labelling.
 - Autoamtic_labelling.py: this script creates the folder ```Labelled_dataset``` with the file data.yaml automatically created.
+- Train_model.py: This file takes as input the images in ```Labelled_dataset``` and trains the model for a specified number of epochs; the results are saved inside ```Model/.../train```
 
 ### Troubleshooting
 If you experience any problem when installing packages, maybe it is beacuse you do not have the 'LongPathEnabled' option in your registry. To fix it, open your system registers (regedit) and navigate to

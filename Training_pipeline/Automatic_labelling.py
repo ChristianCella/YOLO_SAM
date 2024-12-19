@@ -127,6 +127,6 @@ with open(data_file, "w") as f:
     f.write("nc: 1\n")
     f.write(f"test: { (OUTPUT_FOLDER / 'test' / 'images').resolve() }\n")
     f.write(f"train: { (OUTPUT_FOLDER / 'train' / 'images').resolve() }\n")
-    f.write(f"val: { (OUTPUT_FOLDER / 'val' / 'images').resolve() }\n")
+    f.write(f"val: { (OUTPUT_FOLDER / 'valid' / 'images').resolve() }\n")
 
 print("data.yaml created at:", data_file)
