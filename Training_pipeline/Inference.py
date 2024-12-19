@@ -8,7 +8,7 @@ object = "Beckers"
 label = "Becker"
 
 model = YOLO(Path("Model")/object/"train/weights/best.pt")
-image_path = Path("Images/Beckers/Becker_validation_set/color_20241213_190734.png")
+image_path = Path("Images/Beckers/Validation_set/color_20241213_190734.png")
 save_directory = Path("Images")/object/"Inference_results"
 save_directory.mkdir(parents=True, exist_ok=True) # Make sure the directory exists
 
