@@ -1,8 +1,12 @@
 from keras.src.legacy.preprocessing.image import ImageDataGenerator
 from skimage import io
 from pathlib import Path
+import sys
 
-# Define how many 'synthetic' images should be generated per input image
+# Specify if you need to work with bottles or with beckers
+object = "Beckers"
+
+# Define how many 'synthetic' images should be generated per input image (for each image inside th folder)
 num_img = 10
 
 # Define the augmentation transformations
@@ -16,11 +20,15 @@ datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
-# Define the input folder containing the images
-input_folder = Path("Images/Beckers/Becker")
+# Define the input folder containing the images (and check if it exists)
+input_folder = Path("Images")/object/"Becker"
+if not input_folder.exists():
+    print(f"Error: The input folder {input_folder} does not exist")
+    sys.exit(1)
+
 # Define the output folder for augmented images
-output_folder = Path("Images/Temp_augmentation_beckers")
-output_folder.mkdir(parents=True, exist_ok=True)  # Ensure the output folder exists
+output_folder = Path("Images/Beckers/Temp_augmentation_beckers")
+output_folder.mkdir(parents=True, exist_ok=True)  # Ensure the output folder exists, otherwise it is created
 
 # Iterate over all image files in the input folder
 for image_file in input_folder.glob("*.*"):  # Adjust the glob pattern if needed to match specific extensions (e.g., "*.jpg", "*.png")

@@ -1,6 +1,11 @@
 # Detection and Segmentation
 This repo is meant for Windows. All the instructions are given for this operating system.
 ## Setup
+### Requirements
+- keras
+- tensorflow
+- CUDA
+- torch
 ### Virtual environment
 Open a new terminal and type:
 ```
@@ -29,11 +34,6 @@ https://pytorch.org/get-started/locally/; in my case, since I dispose of CUDA 12
 ```
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 ```
-If you experience any problem in doing so, maybe it is beacuse you do not have the 'LongPathEnabled' option in your registry. To fix it, open your system registers (regedit) and navigate to
-```
-Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
-```
-At this point, go to the cell 'LongPathEnabled' and change the value from 0 to 1.
 Now, if you run the code ```Test_version.py``` inside ```Utils```, you should see something like this:
 ```
 PyTorch version: 2.5.1+cu124
@@ -41,3 +41,16 @@ Torchvision version: 0.20.1+cu124
 CUDA available: True
 CUDA version: 12.4
 ```
+
+### Initial structure
+
+### Training pipeline
+For the fine-tuning of the YOLO model, you have to look at the scripts contained in the folder ```Training_pipeline ```, in the following order:
+- Augmentation.py: one at a time all the images in ```Images\Beckers\Becker``` or ```Images\Bottles\Bottle``` ar rotated, translated and filled.
+
+### Troubleshooting
+If you experience any problem when installing packages, maybe it is beacuse you do not have the 'LongPathEnabled' option in your registry. To fix it, open your system registers (regedit) and navigate to
+```
+Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
+```
+At this point, go to the cell 'LongPathEnabled' and change the value from 0 to 1.
