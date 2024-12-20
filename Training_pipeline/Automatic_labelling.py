@@ -19,7 +19,7 @@ if not IMAGE_FOLDER.exists():
     sys.exit(1)
 
 # Define the output folder
-OUTPUT_FOLDER = Path("Images")/object/"Labelled_dataset"
+OUTPUT_FOLDER = Path("Images")/object/"Labelled_set"
 OUTPUT_FOLDER.mkdir(parents = True, exist_ok = True)
 print("Output directory:", OUTPUT_FOLDER)
 
