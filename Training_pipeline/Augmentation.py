@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 
 # Specify if you need to work with bottles or with beckers
-object = "Beckers"
+object = "Bottles"
 
 # Define how many 'synthetic' images should be generated per input image (for each image inside th folder)
 num_img = 10
@@ -27,7 +27,7 @@ if not input_folder.exists():
     sys.exit(1)
 
 # Define the output folder for augmented images
-output_folder = Path("Images/Beckers/Temp_augmentation")
+output_folder = Path("Images")/object/"Temp_augmentation"
 output_folder.mkdir(parents=True, exist_ok=True)  # Ensure the output folder exists, otherwise it is created
 
 # Iterate over all image files in the input folder

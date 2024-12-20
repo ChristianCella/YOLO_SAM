@@ -1,15 +1,24 @@
-# Detection with YOLO
-This repo is meant for Windows. All the instructions are given for this operating system.
-## Setup
-### Requirements
-- ultralytics
-- keras
-- tensorflow
-- CUDA
-- torch
-- rembg
-### Virtual environment
-Open a new terminal and type:
+# You (should) Only Look Once: YOLO 🕵️‍♂️
+The code provided in this branch can be used for the fine-tuning of YOLO, whose original repository can be found here: https://github.com/ultralytics/ultralytics?tab=readme-ov-file. 
+
+---
+### **Requirements and OS**🪟🐍
+The operating system used for the testing of the codes is Windows 11, since no integration with ROS was required. The interpreter used in the virtual environment (detailed in the section [Virtual environment](#environment)) was python 3.10: this is more than enough if you only need to perform the detection stage.
+
+---
+
+### **Core dependencies**
+- ❇️ ultralytics
+- ❇️ keras
+- ❇️ tensorflow
+- ❇️ CUDA
+- ❇️ torch
+- ❇️ rembg
+
+---
+
+### **Virtual environment** <a name="environment"></a>
+Open a new terminal (advice: use the ones inside VScode, to avoid navigating to the desired directory) and type:
 ```
 python -m venv venv
 ```
@@ -22,6 +31,8 @@ To install all the dependencies, you can either run the command
 pip install -r requirements.txt
 ```
 or you can install them manually. The second approach is preferred when you need to use CUDA, as in this case.
+
+---
 
 ### Numpy, torch and torchvision
 To check the CUDA version installed you can run the command
@@ -53,6 +64,8 @@ pip install rembg
 
 ### Initial structure
 
+---
+
 ### Training pipeline
 For the fine-tuning of the YOLO model, you have to look at the scripts contained in the folder ```Training_pipeline```, in the following order:
 - Augmentation.py: one at a time all the images in ```Images\...\Becker``` or ```Images\...\Bottle``` ar rotated, translated and filled. Important: after creating the dataset, look at it and remove all the images that are not meaningful.
@@ -61,7 +74,9 @@ For the fine-tuning of the YOLO model, you have to look at the scripts contained
 - Autoamtic_labelling.py: this script creates the folder ```Labelled_dataset``` with the file data.yaml automatically created.
 - Train_model.py: This file takes as input the images in ```Labelled_dataset``` and trains the model for a specified number of epochs; the results are saved inside ```Model/.../train```
 
-### Troubleshooting
+---
+
+### **Troubleshooting**🎯
 If you experience any problem when installing packages, maybe it is beacuse you do not have the 'LongPathEnabled' option in your registry. To fix it, open your system registers (regedit) and navigate to
 ```
 Computer\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem
