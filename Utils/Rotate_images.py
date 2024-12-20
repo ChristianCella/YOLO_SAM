@@ -1,7 +1,21 @@
+''' 
+Useful script: create images containing objects oriented in specific ways.
+
+Suggestion: run this script only if you obtain a heterogeneous dataset from Augmentation.py.
+'''
+
 from keras.src.legacy.preprocessing.image import ImageDataGenerator
 from skimage import io
 from skimage.transform import rotate
 from pathlib import Path
+
+# Import the colors
+import sys
+sys.path.append(".")
+import Utils.fonts as fonts
+
+# Object under exam
+object = "Bottles"
 
 # Define specific rotations
 specific_rotations = [0, 90, 180, 270]  # Specify the exact angles you want
@@ -17,14 +31,21 @@ datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
-# Define the input folder containing the images
-input_folder = Path("Images/Bottles_to_rotate")
+# Define a list of images to rotate
+image_files = [
+    Path("Images")/object/"Initial_images/20241203_185034.jpg",
+    Path("Images")/object/"Initial_images/20241203_185235.jpg",
+    Path("Images")/object/"Initial_images/20241203_185025.jpg"
+]
+
 # Define the output folder for augmented images
-output_folder = Path("Images/Rotated_bottles")
-output_folder.mkdir(parents=True, exist_ok=True)  # Ensure the output folder exists
+output_folder = Path("Images")/object/"Temp_augmentation"
+output_folder.mkdir(parents=True, exist_ok=True)
 
 # Iterate over all image files in the input folder
-for image_file in input_folder.glob("*.*"):  # Adjust the glob pattern if needed to match specific extensions
+it = 0
+for image_file in image_files:
+    it = it + 1
     try:
         # Read the image
         img = io.imread(image_file)
@@ -46,9 +67,11 @@ for image_file in input_folder.glob("*.*"):  # Adjust the glob pattern if needed
                     save_format='png'
             ):
                 i += 1
+                print(f'{fonts.green}Generated children {i} for image number {it} {fonts.reset}')
                 if i >= 1:  # Only generate one augmentation per rotation
                     break
 
-        print(f"Augmented images generated for {image_file.name}")
+        # Acknowledge the sucess
+        print(f'{fonts.blue}Finished generating images for {image_file.name} {fonts.reset}')
     except Exception as e:
-        print(f"Error processing {image_file.name}: {e}")
+        print(f'{fonts.red}Error processing {image_file.name}: {e} {fonts.reset}')

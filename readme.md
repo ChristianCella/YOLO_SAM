@@ -1,5 +1,5 @@
 # You (should) Only Look Once: YOLO 🕵️‍♂️
-The code provided in this branch can be used for the fine-tuning of YOLO, whose original repository can be found here: https://github.com/ultralytics/ultralytics?tab=readme-ov-file. 
+The code provided in this branch can be used for the fine-tuning of YOLO, whose original repository can be found here: https://github.com/ultralytics/ultralytics?tab=readme-ov-file. The icons used in this file are taken from this repo: https://github.com/ikatyang/emoji-cheat-sheet.
 
 ---
 ### **Requirements and OS**🪟🐍
