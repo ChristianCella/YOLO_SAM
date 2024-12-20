@@ -1,4 +1,4 @@
-# Detection and Segmentation
+# Detection with YOLO
 This repo is meant for Windows. All the instructions are given for this operating system.
 ## Setup
 ### Requirements
