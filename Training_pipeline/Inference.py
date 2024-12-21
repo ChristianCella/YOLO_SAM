@@ -1,16 +1,24 @@
-# This code allows to upload the model obtained with 'Train_model.py' to make inference
+''' 
+Sixth script: test the fine-tuned model.
+'''
 
 from ultralytics import YOLO
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-object = "Beckers"
-label = "Becker"
+# Import the colors
+import sys
+sys.path.append(".")
+import Utils.fonts as fonts
+
+# Object under exam
+object = "Bottles"
+label = "bottle"
 
 model = YOLO(Path("Model")/object/"train/weights/best.pt")
-image_path = Path("Images/Beckers/Validation_set/color_20241213_190734.png")
+image_path = Path("Images/Bottles/Validation_set/color_20241213_190319.png")
 save_directory = Path("Images")/object/"Inference_results"
-save_directory.mkdir(parents=True, exist_ok=True) # Make sure the directory exists
+save_directory.mkdir(parents=True, exist_ok=True)
 
 # Inference
 results = model.predict(

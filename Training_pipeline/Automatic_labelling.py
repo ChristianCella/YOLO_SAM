@@ -1,3 +1,8 @@
+''' 
+Fourth script: automatic labelling of the images.
+Next step: Train_model.py
+'''
+
 import os
 import random
 import cv2
@@ -5,54 +10,52 @@ import sys
 from pathlib import Path
 from ultralytics import YOLO
 
+# Import the colors
+import sys
+sys.path.append(".")
+import Utils.fonts as fonts
+
 # Define a variable for bounding boxes on the images in the training dataset
-SHOW_BOUNDING_BOXES = False
+show_bounding_boxes = False
 
-# Specify if you need to work with bottles or with beckers
-object = "Beckers"
-label = "becker"
+# Object under exam
+object = "Bottles"
+imposed_label = "bottle"
 
-# Define the input folder containing the images (and check if it exists)
-IMAGE_FOLDER = Path("Images")/object/"Before_labelling"
-if not IMAGE_FOLDER.exists():
-    print(f"Error: The input folder {IMAGE_FOLDER} does not exist")
+# Checks on input and output folders
+input_folder = Path("Images")/object/"Before_labelling"
+if not input_folder.exists():
+    print(f'{fonts.red}Error: The input folder {input_folder} does not exist! The execution will be stopped. {fonts.reset}')
     sys.exit(1)
 
-# Define the output folder
-OUTPUT_FOLDER = Path("Images")/object/"Labelled_set"
-OUTPUT_FOLDER.mkdir(parents = True, exist_ok = True)
-print("Output directory:", OUTPUT_FOLDER)
+output_folder = Path("Images")/object/"Labelled_set"
+output_folder.mkdir(parents = True, exist_ok = True)
+print(f'{fonts.green}The output folder is: {output_folder} {fonts.reset}')
 
-# Define the ratios for the training
-SPLIT_RATIOS = {"train": 0.7, "valid": 0.2, "test": 0.1}
-
-# Assign colors for each split (BGR format for OpenCV)
-SPLIT_COLORS = {
-    "train": (0, 255, 0),  # Green for train
-    "valid": (255, 0, 0),  # Blue for valid
-    "test": (0, 0, 255),   # Red for test
+# Define the ratios and the colors for the training
+split_ratios = {"train": 0.7, "valid": 0.2, "test": 0.1}
+split_colors = {
+    "train": (0, 255, 0),  # Green
+    "valid": (0, 0, 255),  # Red
+    "test": (255, 0, 0)    # Blue
 }
 
 # Create the sub-folders for the training dataset
-for split in SPLIT_RATIOS.keys():
-    os.makedirs(os.path.join(OUTPUT_FOLDER, split, "images"), exist_ok=True)
-    os.makedirs(os.path.join(OUTPUT_FOLDER, split, "labels"), exist_ok=True)
+for split in split_ratios.keys():
+    os.makedirs(os.path.join(output_folder, split, "images"), exist_ok=True)
+    os.makedirs(os.path.join(output_folder, split, "labels"), exist_ok=True)
 
 # Create the YOLO model
 model = YOLO("yolov8n.pt")
 
-# Get all image paths
-image_paths = list(Path(IMAGE_FOLDER).glob("*.jpg"))
-
-# Shuffle the images to randomize the splits
+# Get all images and shuffle them to randomize the splits
+image_paths = list(Path(input_folder).glob("*.jpg"))
 random.shuffle(image_paths)
 
-# Calculate the split indices
+# Calculate the split indices and split images
 num_images = len(image_paths)
-train_end = int(SPLIT_RATIOS["train"] * num_images)
-valid_end = train_end + int(SPLIT_RATIOS["valid"] * num_images)
-
-# Split the images into train, valid, and test sets
+train_end = int(split_ratios["train"] * num_images)
+valid_end = train_end + int(split_ratios["valid"] * num_images)
 splits = {
     "train": image_paths[:train_end],
     "valid": image_paths[train_end:valid_end],
@@ -62,30 +65,33 @@ splits = {
 # Process and save the images
 for split, paths in splits.items():
     for image_path in paths:
+
         # Read image using OpenCV
         img = cv2.imread(str(image_path))
         img_height, img_width = img.shape[:2]
         
-        # Run YOLO detection
+        # Run YOLO detection => This is why the artificial dataset must contain only one object
         results = model(image_path)
         detections = results[0].boxes  # Access the first result's bounding boxes
         
         # Define output paths
-        split_image_folder = os.path.join(OUTPUT_FOLDER, split, "images")
-        split_label_folder = os.path.join(OUTPUT_FOLDER, split, "labels")
+        split_image_folder = os.path.join(output_folder, split, "images")
+        split_label_folder = os.path.join(output_folder, split, "labels")
         output_image_path = os.path.join(split_image_folder, image_path.name)
         label_file = os.path.join(split_label_folder, f"{image_path.stem}.txt")
         
         if len(detections) > 0:  # If any objects are detected
+
             # Find the bounding box with the largest area
             largest_box = None
             largest_area = 0
             
-            for box in detections:
+            # In case many objects are detected, we take the one with the largest area
+            for box in detections: 
+
                 # Extract YOLO outputs
                 x_min, y_min, x_max, y_max = map(int, box.xyxy[0].tolist())  # Bounding box coordinates
-                area = (x_max - x_min) * (y_max - y_min)
-                
+                area = (x_max - x_min) * (y_max - y_min)          
                 if area > largest_area:
                     largest_area = area
                     largest_box = box
@@ -93,8 +99,8 @@ for split, paths in splits.items():
             if largest_box:
                 # Extract coordinates for the largest box
                 x_min, y_min, x_max, y_max = map(int, largest_box.xyxy[0].tolist())
-                confidence = largest_box.conf[0]                 # Confidence score
-                class_id = int(largest_box.cls[0])               # Class ID
+                confidence = largest_box.conf[0]
+                class_id = int(largest_box.cls[0])
                 
                 # Normalize bounding box coordinates for YOLO format
                 x_center = ((x_min + x_max) / 2) / img_width
@@ -102,9 +108,10 @@ for split, paths in splits.items():
                 width = (x_max - x_min) / img_width
                 height = (y_max - y_min) / img_height
                 
-                if SHOW_BOUNDING_BOXES:
+                if show_bounding_boxes:
+
                     # Draw the largest bounding box on the image
-                    color = SPLIT_COLORS[split]  # Get the color for the current split
+                    color = split_colors[split]  # Get the color for the current split
                     cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color, 2)
 
                     # Optionally add label text
@@ -118,15 +125,17 @@ for split, paths in splits.items():
             # Save the image with the bounding box
             cv2.imwrite(output_image_path, img)
 
+        else:  # If no objects are detected
+            print(f'{fonts.red}Warning: No objects detected in {image_path.name}!{fonts.reset}')
+
 # After processing, create the data.yaml file
-# Adjust as needed. The paths must point to the folders we just created.
-data_file = OUTPUT_FOLDER / "data.yaml"
+data_file = output_folder / "data.yaml"
 with open(data_file, "w") as f:
     f.write("names:\n")
-    f.write(f"- {label}\n")
+    f.write(f"- {imposed_label}\n")
     f.write("nc: 1\n")
-    f.write(f"test: { (OUTPUT_FOLDER / 'test' / 'images').resolve() }\n")
-    f.write(f"train: { (OUTPUT_FOLDER / 'train' / 'images').resolve() }\n")
-    f.write(f"val: { (OUTPUT_FOLDER / 'valid' / 'images').resolve() }\n")
+    f.write(f"test: { (output_folder / 'test' / 'images').resolve() }\n")
+    f.write(f"train: { (output_folder / 'train' / 'images').resolve() }\n")
+    f.write(f"val: { (output_folder / 'valid' / 'images').resolve() }\n")
 
-print("data.yaml created at:", data_file)
+print(f'{fonts.green}The labelling process has been completed!{fonts.reset}')

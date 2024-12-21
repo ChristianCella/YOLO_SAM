@@ -71,7 +71,10 @@ for idx, input_file in enumerate(input_files):
     object_img = Image.open(temp_path).convert("RGB")
 
     # Create a binary mask
-    mask = Image.eval(object_img.split()[2], lambda px: 0 if px < 20 else 255).convert("L")
+    if object == "Beckers":
+        mask = Image.eval(object_img.split()[2], lambda px: 0 if px < 40 else 255).convert("L")
+    elif object == "Bottles":
+        mask = Image.eval(object_img.split()[2], lambda px: 0 if px < 20 else 255).convert("L")
 
     # Select a random background, ensuring balance
     selected_background = min(background_files, key=lambda bg: background_counter[bg])
